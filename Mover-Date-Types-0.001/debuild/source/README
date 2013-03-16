@@ -1,0 +1,199 @@
+NAME
+    Mover::Date::Types - Mover Moose Types for Dates and Times
+
+VERSION
+    version 0.001
+
+SYNOPSIS
+    use Mover::Types qw/ MoverDateTime MoverDateTimeRecent
+    MoverDateTimeStrIso MoverDateStrYearFirst MoverDateStrMonthFirst
+    MoverDateStrDayFirst MoverTimeStrHourFirst MoverDayInt MoverDayName
+    MoverDayNameShort MoverMonthInt MoverMonthName MoverMonthNameShort
+    MoverTimeHref MoverDateHref MoverDateTimeHref MoverUtcTz MoverDateUnit
+    MoverBeforeOrAfter /;
+
+        my $DateTime = to_MoverDateTime(q/tomorrow at 10pm/);
+        say 'Date is ' . $DateTime->mdy() . ' at ' . $DateTime->hms; 
+
+        $DateTime = to_MoverDateTime(q/1999-12-31/);   # DateTime Obj
+        say 'Party like its ' . $DateTime->year() ;    # 1999
+    
+        my $date_in_string = q{what day  will Christmas be on 12-25-2013 this year? };
+        if($mmddyyyy = to_MoverDateStrMonthFirst($date_in_string){
+                my $date_hash_ref = to_MoverDateHash($date_in_string);
+                say "Yes, it is on $mmddyyyy for the year " .      #12/25/2013
+                $date_hash_ref->{year};                            # 2013
+            # Or if you really want.
+            my $ChrstmasDt = to_MoverDateTime($date_hash_ref);     # DateTime Object
+            say 'Which would be a '. to_MoverDayNameShort($ChristmasDt); # 'wed'
+        }
+
+        say 'The Month is ' . to_MoverMonthName($ChristmasDt)
+            if (is_MoverDateTime($ChritsmasDt));
+    
+        # Given an integer,  tell me what day of week it is?
+        # Monday is 1, to Sunday == 6;
+        say 'The day is '. to_MoverDayName(3); # 'wednesday'
+
+        say 'The month is '. to_MoverMonthName(7); # 'july'
+
+FUNCTIONS
+  MoverDateTime
+ A 'DateTime' object for the Mover project.
+  MoverDateTimeRecent
+ A 'DateTime' object that is not too far into the past or the future.
+ Can be coerced from a string or hash using the role
+ Convert::Input::To::DateTime->convert_to_datetime()
+  MoverUtcTz
+ UTC time zone.
+ Can be coerced from any string that contains 'UTC'
+  MoverDateUnit
+ String to represent date units,  year, month, week, day, hour, minute.
+ Can be coerced from any string that contains the first one of these to 
+ be found using regex.
+  MoverBeforeOrAfter
+ String to represent before_or_after, a particular date.
+ q/before/ or q/after/
+ Can be coerced from any string that contains before or after.
+  MoverDateStrYearFirst
+ A string to represent a date with the year first
+ YYYY/MM/DD corresponding to Regex Commom 
+ $RE{time}{ymd}
+  MoverDateStrMonthFirst
+ A string to represent a date with the month first
+ MM/DD/YYYY corresponding to Regex Commom 
+ $RE{time}{mdy}
+  MoverDateStrDayFirst
+ A string to represent a date with the day first
+ (European style.)
+ DD/MM/YYYY corresponding to Regex Commom 
+ $RE{time}{dmy}
+  coerce MoverDateStrYearFirst MoverDateStrMonthFirst MoverDateStrDayFirst
+      from any string containing a date in one of these formats.
+  MoverDateTimeStrIso (ISO-8601)
+ A string to represent a date in ISO-8601 format
+ Corresponding to Regex Commom 
+ $RE{time}{iso}{-keep}
+ $1 = full match, $2 = year, $3 = month, 
+ $4 = day .. $7 = second.
+  coerce MoverDateTimeStrIso 
+ from any string containing a date in ISO-1861 format
+ using $RE{time}{iso}{-keep}.
+  MoverTimeStrHourFirst
+ A string to represent a time in HH:MM:SS format
+ Corresponding to Regex Common 
+ $RE{time}{hms}
+  coerce MoverTimeStrHourFirst
+ from 'DateTime' Object, 
+ or from a string containing hms using $RE{time}{hms}{-keep}
+  MoverDateHref
+ Date represented by as HashRef.
+ {
+   year  => $year, 
+   month => $month, 
+   day   => $day, 
+ }
+  MoverTimeHref
+ Time represented by as HashRef.
+ {
+   hour    => $hour, 
+   minute  => $minute, 
+   second  => $second, 
+   am_or_pm => q/am/
+ }
+  MoverDateTimeHref
+ Date Time expressed as Hashref
+ {
+   year    => $year, 
+   month   => $month, 
+   day     => $day, 
+   hour    => $hour, 
+   minute  => $minute, 
+   second  => $second, 
+   am_or_pm => q/am/
+  }
+  coerce MoverDateHref
+ From a string containing a date, gives priority to yyyymmdd,
+ then mmddyyyy followed by Euro style ddmmyyyy then ISO-8601
+ date time format.
+  MoverDayInt
+ A single digit to represent a week day. 1 == Monday to 7 == Sunday
+  MoverDayName
+ Day name.
+  MoverDayNameShort
+ Short day name(The first three characters of the day name).
+  coerce MoverDayName
+ from an integer (1 = monday,  to 7 = sunday)
+ from day short name(first three characters, 'mon' to 'monday', 
+ from a day name abbreviation, ie, to thursday from thurs or thur 
+ thu or th.
+  coerce MoverDayNameShort
+ from a day name 
+ from a day name abbreviation, ie, to thursday from thurs or thur 
+ thu or th.
+ from an integer (1 = monday,  to 7 = sunday)
+  MoverMonthInt
+ Integer to represent a month. 1 => january etc.
+  MoverMonthName
+ Month name in long format.
+  coerce MoverMonthName
+ from a month abbreviation ie. to august from aug  or au;
+ from a month number (1 - 12) or a Datetime Object.
+  MoverMonthNameShort
+      Month name in short format(First three characters of the Month name).
+  coerce MoverMonthNameShort
+ from a long month name, a month number (1 - 12) 
+ or from a Datetime Object.
+  coerce MoverDateTime
+ Coerce MoverDateTime from various different input formats.
+ DateTime ISO-8601 string, yyyymmdd string, 
+ mmddyyyy string, ddmmyyyy string, 
+ from any string using DateTime::Format::DateManip formatter
+ and finally from HashRef, 
+ in the above order of preference.
+ More formatters will be added in the furure as required.
+  Date Display Types
+ Convenience types for easy conversion between many date element
+ descriptions.
+NAME
+    Mover::Date::Types - Mover MooseX types for dates and times.
+
+DESCRIPTION
+   Used for creating and or validating various date types, date elements. It
+   is particularly useful for my Mover app and ist modules.
+SEE ALSO
+    *
+         L<MooseX::Types>
+
+    *
+         L<DateTime>
+
+    *
+         L<Regexp::Common::time>
+
+    *
+         L<DateTime::Format::DateManip>
+
+SUPPORT
+  Bugs / Feature Requests
+    Please report any bugs or feature requests through the issue tracker at
+    <https://github.com/aibistin/mover-date-types/issues>. You will be
+    notified automatically of any progress on your issue.
+
+  Source Code
+    This is open source software. The code repository is available for
+    public review and contribution under the terms of the license.
+
+    <https://github.com/aibistin/mover-date-types>
+
+      git clone git://github.com/aibistin/mover-date-types.git
+
+AUTHOR
+    Austin Kenny <aibistin.cionnaith@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2013 by Austin Kenny.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+

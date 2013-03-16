@@ -1,0 +1,301 @@
+=pod
+
+=head1 NAME
+
+Mover::Date::Types - Mover Moose Types for Dates and Times
+
+=head1 VERSION
+
+version 0.001
+
+=head1 SYNOPSIS
+
+use Mover::Types qw/
+          MoverDateTime
+          MoverDateTimeRecent
+          MoverDateTimeStrIso
+          MoverDateStrYearFirst
+          MoverDateStrMonthFirst
+          MoverDateStrDayFirst
+          MoverTimeStrHourFirst
+          MoverDayInt
+          MoverDayName
+          MoverDayNameShort
+          MoverMonthInt
+          MoverMonthName
+          MoverMonthNameShort
+          MoverTimeHref
+          MoverDateHref
+          MoverDateTimeHref
+          MoverUtcTz
+          MoverDateUnit
+          MoverBeforeOrAfter
+          /;
+
+    #----- Coerce a DateTime from a natural string
+    my $DateTime = to_MoverDateTime(q/tomorrow at 10pm/);
+
+    say 'Date is ' . $DateTime->mdy() . ' at ' . $DateTime->hms; 
+
+    #----- Coerce a DateTime from a year first date string
+    $DateTime = to_MoverDateTime(q/1999-12-31/);   # DateTime Obj
+
+    say 'Party like its ' . $DateTime->year() ;    # 1999
+    
+    #----- Create a DateTime from a string containing a date
+    my $date_in_string = q{what day  will Christmas be on 12-25-2013 this year? };
+
+    if($mmddyyyy = to_MoverDateStrMonthFirst($date_in_string){
+            my $date_hash_ref = to_MoverDateHash($date_in_string);
+            say "Yes, it is on $mmddyyyy for the year " .      #12/25/2013
+            $date_hash_ref->{year};                            # 2013
+
+        # Or if you really want; Create a DateTime from a Hashref with
+        # DateTime data
+        my $ChrstmasDt = to_MoverDateTime($date_hash_ref);     # DateTime Object
+
+        say 'Which would be a '. to_MoverDayNameShort($ChristmasDt); # 'wed'
+    }
+
+    #----- Useful ways for displaying DateTime data
+    say 'The Month is ' . to_MoverMonthName($ChristmasDt)
+
+        if (is_MoverDateTime($ChritsmasDt));
+    
+    # Given an integer,  tell me what day of week it is?
+    # Monday is 1, to Sunday == 6;
+    # Careful how you use this one
+
+    say 'The day is '. to_MoverDayName(3); # 'wednesday'
+
+    say 'The month is '. to_MoverMonthName(7); # 'july'
+
+=head2 MoverDateTime
+ A 'DateTime' object for the Mover project.
+
+=head2 MoverDateTimeRecent
+ A 'DateTime' object that is not too far into the past or the future.
+
+=head2 MoverUtcTz
+ UTC time zone.
+ Can be coerced from any string that contains 'UTC' 
+
+=head2 MoverDateUnit
+ String to represent date units,  year, month, week, day, hour, minute.
+ Can be coerced from any string that contains the first one of these to 
+ be found using regex.
+
+=head2 MoverBeforeOrAfter
+ String to represent before_or_after, a particular date.
+ q/before/ or q/after/
+ Can be coerced from any string that contains before or after.
+
+=head2 MoverDateStrYearFirst
+ A string to represent a date with the year first
+ YYYY/MM/DD corresponding to Regex Commom 
+ $RE{time}{ymd}
+
+=head2 MoverDateTimeStrIso (ISO-8601)
+ A string to represent a date in ISO-8601 format
+ Corresponding to Regex Commom 
+ $RE{time}{iso}{-keep}
+ $1 = full match, $2 = year, $3 = month, 
+ $4 = day .. $7 = second.
+
+=head2 MoverDateStrMonthFirst
+ A string to represent a date with the month first
+ MM/DD/YYYY corresponding to Regex Commom 
+ $RE{time}{mdy}
+
+=head2 MoverDateStrDayFirst
+ A string to represent a date with the day first
+ (European style.)
+ DD/MM/YYYY corresponding to Regex Commom 
+ $RE{time}{dmy}
+
+=head2 MoverDateTimeHref
+ DateTime represented by as HashRef.
+ {
+   year    => $year, 
+   month   => $month, 
+   day     => $day, 
+   hour    => $hour, 
+   minute  => $minute, 
+   second  => $second, 
+#--- with optional 
+   am_or_pm => q//, 
+   time_zone => q//, 
+  }
+
+=head2 MoverDateHref
+ Date represented by a HashRef.
+ {
+   year  => $year, 
+   month => $month, 
+   day   => $day, 
+   # with optional
+   time_zone => $_->time_zone, 
+ }
+
+=head2 MoverTimeHref
+ Time represented by a HashRef.
+ {
+   hour         => $hour, 
+   minute       => $minute, 
+   # with optional
+   second       => $second, 
+   nanosecond   => $nanosecond, 
+   am_or_pm     => q//, 
+   time_zone    => q//, 
+ }
+
+=head2 coerce MoverDateStrYearFirst MoverDateStrMonthFirst MoverDateStrDayFirst
+      from any string containing a date in one of these formats.
+
+=head2 coerce MoverDateTimeStrIso 
+ from any string containing a date in ISO-8601 format
+ using $RE{time}{iso}{-keep}.
+ from DateTime object, using the default DateTime stringification
+ method.
+
+=head2 MoverTimeStrHourFirst
+ A string to represent a time in HH:MM:SS format
+ Corresponding to Regex Common 
+ $RE{time}{hms}
+
+=head2 coerce MoverTimeStrHourFirst
+ from 'DateTime' Object, 
+ or from a string containing hms using $RE{time}{hms}{-keep}
+
+=head2 coerce MoverDateTimeHref
+ From an ISO 8601 string
+ from MoverDateHref
+ and from a DateTime Object
+
+=head2 coerce MoverDateHref
+ From a string in MoverDateStrYearFirst format
+ from a string in MoverDateStrMonthformat
+ from a string in MoverDateStrDayFirst format
+ from a string in MoverDateTimeStrIso format
+ from DateTime format
+
+=head2 coerce MoverTimeHref
+ From a string the MoverTimeStrHourFirst format
+              HH:MM:SS, HH:MM:SS AM, HH:MM:SSPM
+ from a DateTime.
+
+=head2 Date Display Types
+ Convenience types for easy conversion between many date element
+ descriptions.
+
+=head2 MoverDayInt
+ A single digit to represent a week day. 1 == Monday to 7 == Sunday
+
+=head2 MoverDayName
+ Day name.
+
+=head2 MoverDayNameShort
+ Short day name(The first three characters of the day name).
+
+=head2 coerce MoverDayName
+ from an integer (1 = monday,  to 7 = sunday)
+ from day short name(first three characters, 'mon' to 'monday', 
+ from a day name abbreviation, ie, to thursday from thurs or thur 
+ thu or th.
+
+=head2 coerce MoverDayNameShort
+ from a day name 
+ from a day name abbreviation, ie, to thursday from thurs or thur 
+ thu or th.
+ from an integer (1 = monday,  to 7 = sunday)
+
+=head2 MoverMonthInt
+ Integer to represent a month. 1 => january etc.
+
+=head2 MoverMonthName
+ Month name in long format.
+
+=head2 coerce MoverMonthName
+ from a month abbreviation ie. to august from aug  or au;
+ from a month number (1 - 12) or a Datetime Object.
+
+=head2 MoverMonthNameShort
+      Month name in short format(First three characters of the Month name).
+
+=head2 coerce MoverMonthNameShort
+ from a long month name, a month number (1 - 12) 
+ or from a Datetime Object.
+
+=head2 coerce MoverDateTime
+ Coerce MoverDateTime from various different input formats.
+ DateTime ISO-8601 string, yyyymmdd string, 
+ mmddyyyy string, ddmmyyyy string, 
+ from any string using DateTime::Format::DateManip formatter
+ and finally from HashRef, 
+ in the above order of preference.
+ More formatters will be added in the furure as required.
+
+=head1 NAME
+
+Mover::Date::Types -  Mover MooseX types for dates and times.
+
+=head1 DESCRIPTION
+   Used for creating and or validating various date types, date elements. It
+   is particularly useful for my Mover app and ist modules.
+
+=head1 SEE ALSO
+
+=over
+
+=item *
+
+ L<Convert::Input::To::DateTime>
+
+=item *
+
+ L<MooseX::Types>
+
+=item *
+
+ L<DateTime>
+
+=item *
+
+ L<Regexp::Common::time>
+
+=item *
+
+ L<DateTime::Format::DateManip>
+
+=back
+
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
+
+=head1 SUPPORT
+
+=head2 Bugs / Feature Requests
+
+Please report any bugs or feature requests through the issue tracker
+at L<https://github.com/aibistin/mover-date-types/issues>.
+You will be notified automatically of any progress on your issue.
+
+=head2 Source Code
+
+This is open source software.  The code repository is available for
+public review and contribution under the terms of the license.
+
+L<https://github.com/aibistin/mover-date-types>
+
+  git clone git://github.com/aibistin/mover-date-types.git
+
+=head1 AUTHOR
+
+Austin Kenny <aibistin.cionnaith@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2013 by Austin Kenny.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
