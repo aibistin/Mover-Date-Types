@@ -39,7 +39,9 @@ Thumbs.db
 *.swp
 .metadata/
 #--- The Dist Zilla ini file
-.ini
+debuild
+*.ini
+.gitignore
 #------- Specific to the App::ForExample Fastcgi Setup Scripts
 *.apache2
 *.monit
@@ -61,5 +63,8 @@ MANIFEST.bak
 META.yml
 MYMETA.yml
 nytprof.out
+.perlcritic
+.perlcriticrc
+.perltidyrc
 pm_to_blib
 log_mover.conf
