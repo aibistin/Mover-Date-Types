@@ -978,26 +978,47 @@ Mover::Date::Types -  Mover MooseX types for dates and times.
 
 =head1 SYNOPSIS
 
+
+#--- Imported Mover Types
 use Mover::Types qw/
           MoverDateTime
+
           MoverDateTimeRecent
+
           MoverDateTimeStrIso
+
           MoverDateStrYearFirst
+
           MoverDateStrMonthFirst
+
           MoverDateStrDayFirst
+
           MoverTimeStrHourFirst
+
           MoverDayInt
+
           MoverDayName
+
           MoverDayNameShort
+
           MoverMonthInt
+
           MoverMonthName
+
           MoverMonthNameShort
+
           MoverTimeHref
+
           MoverDateHref
+
           MoverDateTimeHref
+
           MoverUtcTz
+
           MoverDateUnit
+
           MoverBeforeOrAfter
+
           /;
 
     #----- Coerce a DateTime from a natural string

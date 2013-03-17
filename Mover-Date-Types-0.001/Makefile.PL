@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-
+use 5.010;
 
 use ExtUtils::MakeMaker 6.30;
 
@@ -14,11 +14,13 @@ my %WriteMakefileArgs = (
   "BUILD_REQUIRES" => {
     "Carp" => 0,
     "Data::Dump" => 0,
+    "ExtUtils::MakeMaker" => 0,
     "File::Find" => 0,
     "File::Spec::Functions" => 0,
     "File::Temp" => 0,
     "FindBin" => 0,
     "List::MoreUtils" => 0,
+    "List::Util" => 0,
     "POSIX" => 0,
     "Test::Exception" => 0,
     "Test::More" => 0,
