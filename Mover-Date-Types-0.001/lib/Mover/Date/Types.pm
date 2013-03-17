@@ -787,8 +787,8 @@ version 0.001
 
 =head1 SYNOPSIS
 
-#--- Imported Mover Types
-use Mover::Types qw/
+Exported Mover Types:
+
           MoverDateTime
 
           MoverDateTimeRecent
@@ -827,7 +827,6 @@ use Mover::Types qw/
 
           MoverBeforeOrAfter
 
-          /;
 
     #----- Coerce a DateTime from a natural string
     my $DateTime = to_MoverDateTime(q/tomorrow at 10pm/);
@@ -1101,6 +1100,7 @@ the same terms as the Perl 5 programming language system itself.
 __END__
 
 # ABSTRACT: Mover Moose Types for Dates and Times
+
 
 
 

@@ -979,8 +979,8 @@ Mover::Date::Types -  Mover MooseX types for dates and times.
 =head1 SYNOPSIS
 
 
-#--- Imported Mover Types
-use Mover::Types qw/
+Exported Mover Types:
+
           MoverDateTime
 
           MoverDateTimeRecent
@@ -1019,7 +1019,6 @@ use Mover::Types qw/
 
           MoverBeforeOrAfter
 
-          /;
 
     #----- Coerce a DateTime from a natural string
     my $DateTime = to_MoverDateTime(q/tomorrow at 10pm/);
@@ -1059,6 +1058,7 @@ use Mover::Types qw/
 
     say 'The month is '. to_MoverMonthName(7); # 'july'
 
+=cut
 
 =head1 DESCRIPTION
    Used for creating and or validating various date types, date elements. It

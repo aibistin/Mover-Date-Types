@@ -5,7 +5,9 @@ VERSION
     version 0.001
 
 SYNOPSIS
-    #--- Imported Mover Types use Mover::Types qw/ MoverDateTime
+    Exported Mover Types:
+
+              MoverDateTime
 
               MoverDateTimeRecent
 
@@ -43,7 +45,6 @@ SYNOPSIS
 
               MoverBeforeOrAfter
 
-              /;
 
         #----- Coerce a DateTime from a natural string
         my $DateTime = to_MoverDateTime(q/tomorrow at 10pm/);

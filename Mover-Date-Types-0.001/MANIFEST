@@ -5,7 +5,6 @@ META.json
 META.yml
 Makefile.PL
 README
-README.md
 lib/Mover/Date/Types.pm
 t/00-compile.t
 t/00-report-prereqs.t
